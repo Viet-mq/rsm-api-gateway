@@ -1,0 +1,81 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: api-gateway
+  redis:
+    host: '10.0.0.34'
+    port: 6379
+    password: 'abc@xyz'
+    lettuce:
+      pool:
+        max-active: 7
+        max-idle: 7
+        min-idle: 2
+        max-wait: -1ms
+      shutdown-timeout: 200ms
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: hps-account-svc
+          uri: 'lb://hps-account-svc'
+          predicates:
+            - Path=/hpsapi/**
+          filters:
+            - 'RewritePath=/hps-account-svc/(?<path>.*), /$\{path}'
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: 'forward:/fallback'
+        - id: hps-core
+          uri: 'lb://hps-core'
+          predicates:
+            - Path=/hps-core/**
+          filters:
+            - 'RewritePath=/hps-core/(?<path>.*), /$\{path}'
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: 'forward:/fallback'
+        - id: hps-api
+          uri: 'lb://hps-api'
+          predicates:
+            - Path=/hpsapi/**
+          filters:
+            - 'RewritePath=/hps-api/(?<path>.*), /$\{path}'
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: 'forward:/fallback'
+server:
+  port: '${GATEWAY_PORT:30001}'
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1024
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: '${EUREKA_URI:http://localhost:30000/eureka/}'
+hystrix:
+  command:
+    enrollmentsvc:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+enrollmentsvc:
+  ribbon:
+    ConnectTimeout: 20000
+    ReadTimeout: 20000
+    MaxTotalHttpConnections: 500
+    MaxConnectionsPerHost: 100
+logging:
+  config: config/log4j2.xml
+
+
+
