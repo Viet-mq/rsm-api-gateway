@@ -62,10 +62,10 @@ public class HeaderEnhanceFilter {
             }
 
             request.mutate()
-                    .header(HeaderDefs.USER_NAME_IN_HEADER,entity.getUsername())
-                    .header(HeaderDefs.USER_ROLE,entity.getRole()+"")
-                    .header(HeaderDefs.USER_FULL_NAME,entity.getUsername()+"")
-                    .header(HeaderDefs.USER_PERMISSION,buildPermission(entity.getPermissions()))
+                    .header(HeaderDefs.USER_NAME_IN_HEADER, entity.getUsername())
+                    .header(HeaderDefs.USER_ROLE, entity.getRole() + "")
+                    .header(HeaderDefs.USER_FULL_NAME, entity.getUsername() + "")
+                    .header(HeaderDefs.USER_PERMISSION, buildPermission(entity.getPermissions()))
                     .build();
 
             return response;
