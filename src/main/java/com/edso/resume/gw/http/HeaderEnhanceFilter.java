@@ -5,6 +5,7 @@ import com.edso.resume.gw.entities.SessionEntity;
 import com.edso.resume.gw.jwt.AuthResponse;
 import com.edso.resume.gw.repo.SessionRepository;
 import com.edso.resume.lib.common.ErrorCodeDefs;
+import com.edso.resume.lib.common.HeaderDefs;
 import com.edso.resume.lib.exception.SessionException;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.*;
@@ -20,9 +21,6 @@ import java.util.Objects;
 public class HeaderEnhanceFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public static final String USER_ID_IN_HEADER = "X-USER-ID";
-    public static final String USER_ID_ROLE_HEADER = "X-USER-ROLE";
-    public static final String PERMISSION_HEADER = "X-PERMISSION";
 
     public AuthResponse doFilter(ServerHttpRequest request, SessionRepository sessionRepository) {
 
@@ -64,9 +62,10 @@ public class HeaderEnhanceFilter {
             }
 
             request.mutate()
-                    .header(USER_ID_IN_HEADER, entity.getUsername())
-                    .header(USER_ID_ROLE_HEADER, entity.getRole() + "")
-                    .header(PERMISSION_HEADER, buildPermission(entity.getPermissions()))
+                    .header(HeaderDefs.USER_NAME_IN_HEADER,entity.getUsername())
+                    .header(HeaderDefs.USER_ROLE,entity.getRole()+"")
+                    .header(HeaderDefs.USER_FULL_NAME,entity.getUsername()+"")
+                    .header(HeaderDefs.USER_PERMISSION,buildPermission(entity.getPermissions()))
                     .build();
 
             return response;
