@@ -4,9 +4,9 @@ spring:
   application:
     name: api-gateway
   redis:
-    host: '10.0.0.34'
-    port: 6379
-    password: 'abc@xyz'
+    host: '103.152.165.53'
+    port: 9981
+    password: 'hhhhhhhhhhsdvnsldvmsdlvmsdlkvmsdv'
     lettuce:
       pool:
         max-active: 7
@@ -21,32 +21,32 @@ spring:
           enabled: true
           lowerCaseServiceId: true
       routes:
-        - id: hps-account-svc
-          uri: 'lb://hps-account-svc'
+        - id: acc-svc
+          uri: 'lb://acc-svc'
           predicates:
-            - Path=/hpsapi/**
+            - Path=/acc-svc/**
           filters:
-            - 'RewritePath=/hps-account-svc/(?<path>.*), /$\{path}'
+            - 'RewritePath=/acc-svc/(?<path>.*), /$\{path}'
             - name: Hystrix
               args:
                 name: fallbackcmd
                 fallbackUri: 'forward:/fallback'
-        - id: hps-core
-          uri: 'lb://hps-core'
+        - id: api-svc
+          uri: 'lb://api-svc'
           predicates:
-            - Path=/hps-core/**
+            - Path=/api-svc/**
           filters:
-            - 'RewritePath=/hps-core/(?<path>.*), /$\{path}'
+            - 'RewritePath=/api-svc/(?<path>.*), /$\{path}'
             - name: Hystrix
               args:
                 name: fallbackcmd
                 fallbackUri: 'forward:/fallback'
-        - id: hps-api
-          uri: 'lb://hps-api'
+        - id: upload-svc
+          uri: 'lb://upload-svc'
           predicates:
-            - Path=/hpsapi/**
+            - Path=/upload-svc/**
           filters:
-            - 'RewritePath=/hps-api/(?<path>.*), /$\{path}'
+            - 'RewritePath=/upload-svc/(?<path>.*), /$\{path}'
             - name: Hystrix
               args:
                 name: fallbackcmd
