@@ -4,7 +4,7 @@ spring:
   application:
     name: api-gateway
   redis:
-    host: '103.152.165.53'
+    host: 'localhost'
     port: 9981
     password: 'hhhhhhhhhhsdvnsldvmsdlvmsdlkvmsdv'
     lettuce:
@@ -60,7 +60,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: '${EUREKA_URI:http://localhost:30000/eureka/}'
+      defaultZone: '${EUREKA_URI:http://localhost:30300/eureka/}'
 hystrix:
   command:
     enrollmentsvc:
