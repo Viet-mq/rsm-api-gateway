@@ -58,6 +58,8 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
         auths.add("/auth/register");
         auths.add("/auth/forgot-password");
         auths.add("/swagger");
+        auths.add("/v2/api-docs");
+        auths.add("/webjars/springfox-swagger-ui");
     }
 
     private boolean isAuthenticatedUrl(String url) {
