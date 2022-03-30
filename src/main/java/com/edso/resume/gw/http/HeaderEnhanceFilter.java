@@ -65,7 +65,8 @@ public class HeaderEnhanceFilter {
                     .header(HeaderDefs.USER_NAME_IN_HEADER, entity.getUsername())
                     .header(HeaderDefs.USER_ROLE, entity.getRole() + "")
                     .header(HeaderDefs.USER_FULL_NAME, entity.getUsername() + "")
-                    .header(HeaderDefs.USER_PERMISSION, buildPermission(entity.getPermissions()))
+                    .header(HeaderDefs.USER_ORGANIZATION, buildList(entity.getOrganizations()))
+                    .header(HeaderDefs.USER_PERMISSION, buildList(entity.getPermissions()))
                     .build();
 
             return response;
@@ -77,7 +78,7 @@ public class HeaderEnhanceFilter {
 
     }
 
-    private String buildPermission(List<String> permission) {
+    private String buildList(List<String> permission) {
         StringBuilder sb = new StringBuilder();
         if (permission != null && !permission.isEmpty()) {
             for (String p : permission) {
