@@ -22,6 +22,7 @@ public class SessionEntity implements Serializable {
     private String fullName;
     private Integer role;
     private List<String> permissions;
+    private List<String> organizations;
     private Long lastRequest;
     @Builder.Default
     private Boolean needToDie = false;
