@@ -33,8 +33,8 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        AuthResponse response = headerEnhanceFilter.doFilter(request, cachedUserInfoRepo);
         String requestUri = request.getURI().getPath();
+        AuthResponse response = headerEnhanceFilter.doFilter(request, cachedUserInfoRepo, requestUri);
         if (isAuthenticatedUrl(requestUri) && !isImageUrl(requestUri)) {
             if (response.getCode() != ErrorCodeDefs.ERROR_CODE_OK) {
                 exchange.getResponse().setStatusCode(HttpStatus.OK);

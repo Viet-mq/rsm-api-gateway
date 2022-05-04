@@ -22,7 +22,7 @@ public class HeaderEnhanceFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public AuthResponse doFilter(ServerHttpRequest request, SessionRepository sessionRepository) {
+    public AuthResponse doFilter(ServerHttpRequest request, SessionRepository sessionRepository, String requestUri) {
 
         String authorization = extractHeaderToken(request);
         AuthResponse response = new AuthResponse(authorization);
@@ -61,10 +61,33 @@ public class HeaderEnhanceFilter {
                 return response;
             }
 
+            if (entity.getRole() != 1) {
+
+                if (entity.getApiPaths() == null || entity.getApiPaths().isEmpty()) {
+                    logger.info("token authorization: {} not have access", authorization);
+                    response.setResult(ErrorCodeDefs.NOT_HAVE_ACCESS, "Tài khoản không được phép truy cập đến api này");
+                    return response;
+                }
+
+                //check uri
+                boolean check = false;
+                for (String path : entity.getApiPaths()) {
+                    if (requestUri.equals(path)) {
+                        check = true;
+                        break;
+                    }
+                }
+                if (!check) {
+                    logger.info("token authorization: {} not have access", authorization);
+                    response.setResult(ErrorCodeDefs.NOT_HAVE_ACCESS, "Tài khoản không được phép truy cập đến api này");
+                    return response;
+                }
+            }
+
             request.mutate()
                     .header(HeaderDefs.USER_NAME_IN_HEADER, entity.getUsername())
                     .header(HeaderDefs.USER_ROLE, entity.getRole() + "")
-                    .header(HeaderDefs.USER_FULL_NAME, entity.getUsername() + "")
+                    .header(HeaderDefs.USER_MY_ORGANIZATION, buildList(entity.getMyOrganizations()))
                     .header(HeaderDefs.USER_ORGANIZATION, buildList(entity.getOrganizations()))
                     .header(HeaderDefs.USER_PERMISSION, buildList(entity.getPermissions()))
                     .build();

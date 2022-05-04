@@ -4,9 +4,10 @@ spring:
   application:
     name: api-gateway
   redis:
-    host: 'localhost'
-    port: 9981
+    host: 18.139.222.137
+    port: 6379
     password: 'hhhhhhhhhhsdvnsldvmsdlvmsdlkvmsdv'
+    database: 1
     lettuce:
       pool:
         max-active: 7
